@@ -24,10 +24,10 @@ body {
   background-color: var(--swatch-primary);
   font-family: "Lexend Exa";
   position: absolute;
-  width: 80%;
-  left: 10%;
-  height: 90%;
-  top: 5%;
+  width: 100%;
+  left: 0%;
+  height: 100%;
+  top: 0%;
 }
 
 #app-root {
@@ -53,6 +53,7 @@ body {
   border-style: solid;
   border-radius: 10px;
 }
+
 #splash-screen {
   background-image: url("https://www.gifcen.com/wp-content/uploads/2022/03/rickroll-gif-7.gif");
   background-size: cover;
@@ -64,7 +65,7 @@ body {
   border-radius: 2px;
   padding-top: 1%;
   padding-bottom: 14%;
-  height:70%;
+  height: 70%;
   text-align: center;
   vertical-align: center;
 }
@@ -72,6 +73,15 @@ body {
 #edit-toolbar {
   background-color: transparent;
   transform: translate(41%, 0%);
+
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  margin: auto;
+  vertical-align: left;
 }
 
 .playlister-button,
@@ -252,9 +262,11 @@ input {
   width: 95%;
   padding-left: 5%;
 }
+
 .playlister-item {
   background-color: var(--swatch-complement);
 }
+
 .playlister-item-dragged-to {
   background-color: var(--swatch-accent);
 }
@@ -325,7 +337,7 @@ input {
   border-style: groove;
 }
 
-.modal-dialog > * {
+.modal-dialog>* {
   padding: 1rem;
 }
 
@@ -346,7 +358,7 @@ input {
   font-size: 1.5rem;
 }
 
-.modal p + p {
+.modal p+p {
   margin-top: 1rem;
 }
 

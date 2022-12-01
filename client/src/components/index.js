@@ -13,18 +13,24 @@ import SongCard from './SongCard'
 import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
 import WorkspaceScreen from './WorkspaceScreen'
+import ToolBar from './ToolBar'
+import YoutubePlayer from './YoutubePlayer.js'
+import SongWindow from './SongWindow'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
     
     @author McKilla Gorilla
 */
-export { 
-    AppBanner,  
-    EditToolbar, 
+export {
+    SongWindow,
+    YoutubePlayer,
+    ToolBar,
+    AppBanner,
+    EditToolbar,
     HomeScreen,
     HomeWrapper,
-    ListCard, 
+    ListCard,
     LoginScreen,
     MUIDeleteModal,
     MUIEditSongModal,
@@ -33,5 +39,6 @@ export {
     SongCard,
     RegisterScreen,
     SplashScreen,
-    Statusbar, 
-    WorkspaceScreen }
+    Statusbar,
+    WorkspaceScreen
+}

@@ -15,7 +15,7 @@ import { GlobalStoreContext } from '../store/index.js'
 function WorkspaceScreen() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
-    
+
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
         modalJSX = <MUIEditSongModal />;
@@ -25,23 +25,23 @@ function WorkspaceScreen() {
     }
     return (
         <Box id="list-selector-list">
-        <List 
-            id="playlist-cards" 
-            sx={{overflow: 'scroll', height: '87%', width: '100%', bgcolor: '#8000F00F'}}
-        >
-            {
-                store.currentList.songs.map((song, index) => (
-                    <SongCard
-                        id={'playlist-song-' + (index)}
-                        key={'playlist-song-' + (index)}
-                        index={index}
-                        song={song}
-                    />
-                ))  
-            }
-         </List>            
-         { modalJSX }
-         </Box>
+            <List
+                id="playlist-cards"
+                sx={{ overflow: 'scroll', height: '87%', width: '65%', bgcolor: '#8000F00F' }}
+            >
+                {
+                    store.currentList.songs.map((song, index) => (
+                        <SongCard
+                            id={'playlist-song-' + (index)}
+                            key={'playlist-song-' + (index)}
+                            index={index}
+                            song={song}
+                        />
+                    ))
+                }
+            </List>
+            {modalJSX}
+        </Box>
     )
 }
 

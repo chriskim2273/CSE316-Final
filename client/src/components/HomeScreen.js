@@ -24,42 +24,42 @@ const HomeScreen = () => {
     }
     let listCard = "";
     if (store) {
-        listCard = 
-            <List sx={{width: '100%', bgcolor: 'background.paper', mb:"20px" }}>
-            {
-                store.idNamePairs.map((pair) => (
-                    <ListCard
-                        key={pair._id}
-                        idNamePair={pair}
-                        selected={false}
-                    />
-                ))
-                
-            }
-            <Fab sx={{transform:"translate(1150%, 10%)"}}
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-            >
-                <AddIcon />
-            </Fab>
+        listCard =
+            <List sx={{ width: '65%', bgcolor: 'background.paper', mb: "20px" }}>
+                {
+                    store.idNamePairs.map((pair) => (
+                        <ListCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+
+                }
+                <Fab sx={{ transform: "translate(1150%, 10%)" }}
+                    color="primary"
+                    aria-label="add"
+                    id="add-list-button"
+                    onClick={handleCreateNewList}
+                >
+                    <AddIcon />
+                </Fab>
             </List>;
     }
     return (
         <div id="playlist-selector">
             <div id="list-selector-heading">
-            <Fab sx={{transform:"translate(-20%, 0%)"}}
-                color="primary" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewList}
-            >
-                <AddIcon />
-            </Fab>
+                <Fab sx={{ transform: "translate(-20%, 0%)" }}
+                    color="primary"
+                    aria-label="add"
+                    id="add-list-button"
+                    onClick={handleCreateNewList}
+                >
+                    <AddIcon />
+                </Fab>
                 Your Playlists
             </div>
-            <Box sx={{bgcolor:"background.paper"}} id="list-selector-list">
+            <Box sx={{ bgcolor: "background.paper" }} id="list-selector-list">
                 {
                     listCard
                 }
