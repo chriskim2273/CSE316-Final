@@ -54,18 +54,6 @@ const HomeScreen = (props) => {
     }
     return (
         <div id="playlist-selector">
-
-            <div id="list-selector-heading">
-                <Fab sx={{ transform: "translate(-20%, 0%)" }}
-                    color="primary"
-                    aria-label="add"
-                    id="add-list-button"
-                    onClick={handleCreateNewList}
-                >
-                    <AddIcon />
-                </Fab>
-                Your Playlists
-            </div>
             <Box sx={{ bgcolor: "background.paper" }} id="list-selector-list">
                 {
                     listCard

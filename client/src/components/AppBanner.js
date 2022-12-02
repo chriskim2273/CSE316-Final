@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Grid } from '@mui/material';
 
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
@@ -99,28 +100,33 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar >
-                    <Typography
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
-                    >
-                        <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>Playlister</Link>
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ height: "50px", display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center">
+                        <Typography
+                            variant="h4"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}
                         >
-                            {getAccountMenu(auth.loggedIn)}
-                        </IconButton>
-                    </Box>
+                            <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'>Playlister</Link>
+                        </Typography>
+                        <Box sx={{ height: "50px", display: { xs: 'none', md: 'flex' } }}>
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                {getAccountMenu(auth.loggedIn)}
+                            </IconButton>
+                        </Box>
+                    </Grid>
                 </Toolbar>
             </AppBar>
             {

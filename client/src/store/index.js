@@ -106,7 +106,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter + 1,
@@ -298,6 +298,28 @@ function GlobalStoreContextProvider(props) {
         let newListName = "Untitled" + store.newListCounter;
         const response = await api.createPlaylist(newListName, [], auth.user.email);
         console.log("createNewList response: " + response);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            storeReducer({
+                type: GlobalStoreActionType.CREATE_NEW_LIST,
+                payload: newList
+            }
+            );
+
+            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+            history.push("/joe/");
+            history.push("/");
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+    }
+
+    store.duplicateList = async function (title, songs) {
+        let newListName = title;
+        const response = await api.createPlaylist(newListName, songs, auth.user.email);
+        console.log("duplicateList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;

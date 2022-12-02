@@ -30,6 +30,10 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    const [updatedList, setUpdatedList] = useState(false);
+    function refreshOnUpdate() {
+        setUpdatedList(!updatedList);
+    }
     const { idNamePair, selected, is_expanded, setExpanded } = props;
     const { auth } = useContext(AuthContext);
 
@@ -114,6 +118,10 @@ function ListCard(props) {
     function handleAddNewSong() {
         store.addNewSong();
     }
+    function handleDuplicateList() {
+        store.duplicateList(store.currentList.name, store.currentList.songs);
+        refreshOnUpdate();
+    }
     function handleUndo() {
         store.undo();
     }
@@ -139,11 +147,14 @@ function ListCard(props) {
 
             <Accordion
                 onChange={(event, isExpanded) => {
-                    handleLoadList(event, idNamePair._id);
                     handleChange(isExpanded, idNamePair._id);
+                    handleLoadList(event, idNamePair._id);
+                    if (store.canClose() && isExpanded) {
+                        handleClose();
+                    }
                 }}
                 sx={{ width: "100%" }}
-                expanded={is_expanded === idNamePair._id}
+                expanded={is_expanded === idNamePair._id && store.currentList != null}
             >
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -159,13 +170,6 @@ function ListCard(props) {
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
                             <EditIcon style={{ fontSize: '48pt' }} />
-                        </IconButton>
-                    </Box>
-                    <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => {
-                            handleDeleteList(event, idNamePair._id)
-                        }} aria-label='delete'>
-                            <DeleteIcon style={{ fontSize: '48pt' }} />
                         </IconButton>
                     </Box>
                     <Box
@@ -226,7 +230,10 @@ function ListCard(props) {
                                         handleDeleteList(event, idNamePair._id)
                                         setExpanded(false);
                                     }}>Delete</Button>
-                                <Button>Duplicate</Button>
+                                <Button
+                                    onClick={(event) => {
+                                        handleDuplicateList(store.currentList.name, store.currentList.songs);
+                                    }}>Duplicate</Button>
                             </Box>
                         </Grid>
                         {modalJSX}

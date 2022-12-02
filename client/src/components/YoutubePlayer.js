@@ -2,7 +2,7 @@ import React from 'react';
 import YouTube from 'react-youtube';
 
 export default function YoutubePlayer(props) {
-    let video = "NLphEFOyoqM";
+    let video = "NO_VIDEO_CURRENTLY_PLAYING";
     if (props.videoId) {
         video = props.videoId.youTubeId;
     }

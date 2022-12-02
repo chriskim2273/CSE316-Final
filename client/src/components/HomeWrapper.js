@@ -7,10 +7,19 @@ import ToolBar from './ToolBar'
 import SongWindow from './SongWindow'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import GlobalStoreContext from '../store'
 
 export default function HomeWrapper() {
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
     const [searchText, setSearchText] = useState("");
+
+    let songWindow = "";
+    if (store.currentList != null) {
+        songWindow = (<Box sx={{ width: '37%' }}>
+            <SongWindow sx={{ height: "100%" }} />
+        </Box>)
+    }
 
     console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
     if (auth.loggedIn)
@@ -18,12 +27,10 @@ export default function HomeWrapper() {
             <ToolBar setSearchText={setSearchText} />
 
             <Box sx={{ display: 'flex' }}>
-                <Box sx={{ width: '63%' }}>
+                <Box sx={{ overflow: 'scroll', height: '83vh', width: '100%' }}>
                     <HomeScreen searchText={searchText} />
                 </Box>
-                <Box sx={{ width: '37%' }}>
-                    <SongWindow sx={{ height: "100%" }} />
-                </Box>
+                {songWindow}
             </Box>
         </Box>
     else
