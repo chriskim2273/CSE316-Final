@@ -23,6 +23,8 @@ const authRouter = require('./routes/auth-router')
 app.use('/auth', authRouter)
 const playlistsRouter = require('./routes/playlists-router')
 app.use('/api', playlistsRouter)
+const publishedRouter = require('./routes/published-router')
+app.use('/api', publishedRouter)
 
 // INITIALIZE OUR DATABASE OBJECT
 const db = require('./db')

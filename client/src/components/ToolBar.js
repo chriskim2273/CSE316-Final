@@ -16,6 +16,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import Button from '@mui/material/Button';
 import SortIcon from '@mui/icons-material/Sort';
+import { Link } from 'react-router-dom';
 
 export default function ToolBar(props) {
     const { auth } = useContext(AuthContext);
@@ -30,6 +31,9 @@ export default function ToolBar(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const handleHouseClick = () => {
+        store.closeCurrentList();
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -48,7 +52,7 @@ export default function ToolBar(props) {
                                 aria-label="Rewind"
                                 sx={{ mr: 0 }}
                             >
-                                <HomeIcon />
+                                <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/'><HomeIcon /></Link>
                             </IconButton>
                             <IconButton
                                 size="large"
@@ -57,7 +61,7 @@ export default function ToolBar(props) {
                                 aria-label="Stop"
                                 sx={{ mr: 0 }}
                             >
-                                <PeopleIcon />
+                                <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/published/'><PeopleIcon /></Link>
                             </IconButton>
                             <IconButton
                                 size="large"

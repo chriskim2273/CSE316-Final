@@ -30,6 +30,7 @@ import {
     Statusbar,
     WorkspaceScreen
 } from './components'
+import PublishedScreenWrapper from './components/PublishedScreenWrapper';
 /*
     This is our application's top-level component.
     
@@ -51,6 +52,7 @@ const App = () => {
                     <AppBanner />
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />
+                        <Route path="/published/" exact component={PublishedScreenWrapper} />
                         <Route path="/login/" exact component={LoginScreen} />
                         <Route path="/register/" exact component={RegisterScreen} />
                         <Route path="/playlist/:id" exact component={WorkspaceScreen} />

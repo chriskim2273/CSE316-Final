@@ -8,8 +8,9 @@ import SongWindow from './SongWindow'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
 import GlobalStoreContext from '../store'
+import PublishedScreen from './PublishedScreen'
 
-export default function HomeWrapper() {
+export default function PublishedScreenWrapper() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [searchText, setSearchText] = useState("");
@@ -21,14 +22,14 @@ export default function HomeWrapper() {
         </Box>)
     }
 
-    console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
+    console.log("PublishedScreenWrapper auth.loggedIn: " + auth.loggedIn);
     if (auth.loggedIn)
         return <Box>
             <ToolBar setSearchText={setSearchText} />
 
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ overflow: 'scroll', height: '83vh', width: '100%' }}>
-                    <HomeScreen searchText={searchText} />
+                    <PublishedScreen searchText={searchText} />
                 </Box>
                 {songWindow}
             </Box>
