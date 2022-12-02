@@ -74,10 +74,10 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
+    auth.registerUser = async function (firstName, lastName, email, password, passwordVerify) {
         console.log("REGISTERING USER");
-        try{   
-            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);   
+        try {
+            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);
             if (response.status === 200) {
                 console.log("Registered Sucessfully");
                 authReducer({
@@ -93,7 +93,7 @@ function AuthContextProvider(props) {
                 auth.loginUser(email, password);
                 console.log("LOGGED IN");
             }
-        } catch(error){
+        } catch (error) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {
@@ -105,8 +105,8 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.loginUser = async function(email, password) {
-        try{
+    auth.loginUser = async function (email, password) {
+        try {
             const response = await api.loginUser(email, password);
             if (response.status === 200) {
                 authReducer({
@@ -119,7 +119,7 @@ function AuthContextProvider(props) {
                 })
                 history.push("/");
             }
-        } catch(error){
+        } catch (error) {
             authReducer({
                 type: AuthActionType.LOGIN_USER,
                 payload: {
@@ -131,10 +131,10 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.logoutUser = async function() {
+    auth.logoutUser = async function () {
         const response = await api.logoutUser();
         if (response.status === 200) {
-            authReducer( {
+            authReducer({
                 type: AuthActionType.LOGOUT_USER,
                 payload: null
             })
@@ -142,7 +142,7 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.getUserInitials = function() {
+    auth.getUserInitials = function () {
         let initials = "";
         if (auth.user) {
             initials += auth.user.firstName.charAt(0);
@@ -150,6 +150,12 @@ function AuthContextProvider(props) {
         }
         console.log("user initials: " + initials);
         return initials;
+    }
+
+    auth.getUserName = function () {
+        if (auth.user) {
+            return auth.user;
+        }
     }
 
     return (

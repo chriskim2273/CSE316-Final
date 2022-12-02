@@ -6,7 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-import { Modal } from '@mui/material';
+import { Button, Grid, Modal } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -16,6 +16,9 @@ import { List } from '@mui/material';
 import SongCard from './SongCard';
 import MUIEditSongModal from './MUIEditSongModal';
 import MUIRemoveSongModal from './MUIRemoveSongModal';
+import AuthContext from '../auth';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -28,6 +31,7 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected, is_expanded, setExpanded } = props;
+    const { auth } = useContext(AuthContext);
 
     let songs = store.currentList ? (store.currentList.songs ? store.currentList.songs : []) : []
 
@@ -107,6 +111,19 @@ function ListCard(props) {
 
     console.log("Songs: " + songs);
 
+    function handleAddNewSong() {
+        store.addNewSong();
+    }
+    function handleUndo() {
+        store.undo();
+    }
+    function handleRedo() {
+        store.redo();
+    }
+    function handleClose() {
+        store.closeCurrentList();
+    }
+
 
     let cardElement =
         <ListItem
@@ -133,7 +150,12 @@ function ListCard(props) {
                     aria-controls={"panel-content-" + idNamePair._id}
                     id={"panel-header-" + idNamePair._id}
                 >
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <Box
+                        sx={{ display: 'grid' }}
+                    >
+                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                        <Typography> By {auth.getUserName().firstName + " " + auth.getUserName().lastName} </Typography>
+                    </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
                             <EditIcon style={{ fontSize: '48pt' }} />
@@ -146,12 +168,22 @@ function ListCard(props) {
                             <DeleteIcon style={{ fontSize: '48pt' }} />
                         </IconButton>
                     </Box>
+                    <Box
+                        sx={{ display: 'flex' }}>
+                        <ThumbUpIcon />
+                        <Typography>0</Typography>
+                    </Box>
+                    <Box
+                        sx={{ display: 'flex' }}>
+                        <ThumbDownIcon />
+                        <Typography>0</Typography>
+                    </Box>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Box>
                         <List
                             id="playlist-cards"
-                            sx={{ overflow: 'scroll', height: '100%', width: '100%', bgcolor: '#8000F00F' }}
+                            sx={{ overflow: 'scroll', height: '35vh', width: '100%', bgcolor: '#8000F00F' }}
                         >
                             {
                                 songs.map((song, index) => (
@@ -163,7 +195,40 @@ function ListCard(props) {
                                     />
                                 ))
                             }
+                            <ListItem>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleAddNewSong}
+                                >+</Button>
+                            </ListItem>
                         </List>
+                        <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <Box>
+                                <Button
+                                    disabled={!store.canUndo()}
+                                    onClick={handleUndo}
+                                >
+                                    Undo</Button>
+                                <Button
+                                    disabled={!store.canRedo()}
+                                    onClick={handleRedo}
+                                >Redo</Button>
+                            </Box>
+                            <Box>
+                                <Button>Publish</Button>
+                                <Button
+                                    onClick={(event) => {
+                                        handleDeleteList(event, idNamePair._id)
+                                        setExpanded(false);
+                                    }}>Delete</Button>
+                                <Button>Duplicate</Button>
+                            </Box>
+                        </Grid>
                         {modalJSX}
                     </Box>
                 </AccordionDetails>
