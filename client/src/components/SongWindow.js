@@ -21,6 +21,7 @@ export default function SongWindow() {
     const { store } = useContext(GlobalStoreContext);
 
     const [tab, setTab] = useState('1');
+    const [youtubePlayer, setYoutubePlayer] = useState();
 
     const handleTabChange = (event, newTab) => {
         setTab(newTab);
@@ -40,7 +41,7 @@ export default function SongWindow() {
             return store.currentSong;
         }
         else {
-            return { title: "", artist: "" }
+            return { title: "", artist: "" };
         }
     }
 
@@ -63,7 +64,7 @@ export default function SongWindow() {
             <TabPanel value="1">
                 <Box sx={{ display: 'grid' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <YoutubePlayer videoId={store.currentSong} />
+                        <YoutubePlayer videoId={store.currentSong} setPlayer={setYoutubePlayer} />
                     </Box>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'grid' }}>
                         <Typography variant="h5" component="h5">
@@ -98,6 +99,9 @@ export default function SongWindow() {
                                         color="inherit"
                                         aria-label="Rewind"
                                         sx={{ mr: 0 }}
+                                        onClick={(event) => {
+                                            youtubePlayer.seekTo(youtubePlayer.getCurrentTime() - 10, true);
+                                        }}
                                     >
                                         <FastRewindIcon />
                                     </IconButton>
@@ -107,6 +111,9 @@ export default function SongWindow() {
                                         color="inherit"
                                         aria-label="Stop"
                                         sx={{ mr: 0 }}
+                                        onClick={(event) => {
+                                            youtubePlayer.pauseVideo();
+                                        }}
                                     >
                                         <StopIcon />
                                     </IconButton>
@@ -116,6 +123,9 @@ export default function SongWindow() {
                                         color="inherit"
                                         aria-label="Play"
                                         sx={{ mr: 0 }}
+                                        onClick={(event) => {
+                                            youtubePlayer.playVideo();
+                                        }}
                                     >
                                         <PlayArrowIcon />
                                     </IconButton>
@@ -125,6 +135,9 @@ export default function SongWindow() {
                                         color="inherit"
                                         aria-label="FastForward"
                                         sx={{ mr: 0 }}
+                                        onClick={(event) => {
+                                            youtubePlayer.seekTo(youtubePlayer.getCurrentTime() + 10, true);
+                                        }}
                                     >
                                         <FastForwardIcon />
                                     </IconButton>

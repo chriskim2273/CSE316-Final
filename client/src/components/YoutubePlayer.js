@@ -6,6 +6,7 @@ export default function YoutubePlayer(props) {
     if (props.videoId) {
         video = props.videoId.youTubeId;
     }
+    const { setPlayer } = props;
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO
     // DEMONSTRATES HOW TO IMPLEMENT A PLAYLIST THAT MOVES
@@ -47,6 +48,7 @@ export default function YoutubePlayer(props) {
     function onPlayerReady(event) {
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
+        setPlayer(event.target);
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
