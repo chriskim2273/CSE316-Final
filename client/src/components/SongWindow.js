@@ -25,6 +25,33 @@ export default function SongWindow() {
     const handleTabChange = (event, newTab) => {
         setTab(newTab);
     };
+
+    const listName = () => {
+        if (store.currentList != null) {
+            return store.currentList.name;
+        }
+        else {
+            return "";
+        }
+    }
+
+    const playingSong = () => {
+        if (store.currentSong != null) {
+            return store.currentSong;
+        }
+        else {
+            return { title: "", artist: "" }
+        }
+    }
+
+    const playingSongIndex = () => {
+        if (store.currentSongIndex != null && store.currentSongIndex != -1) {
+            return store.currentSongIndex + 1;
+        }
+        else {
+            return "";
+        }
+    }
     return (
         <TabContext value={tab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -43,16 +70,16 @@ export default function SongWindow() {
                             Now Playing
                         </Typography>
                         <Typography variant="body2" component="body1">
-                            Playlist: { }
+                            Playlist: {listName()}
                         </Typography>
                         <Typography variant="body2" component="body1">
-                            Song #: { }
+                            Song #: {playingSongIndex()}
                         </Typography>
                         <Typography variant="body2" component="body1">
-                            Title: { }
+                            Title: {playingSong().title}
                         </Typography>
                         <Typography variant="body2" component="body1">
-                            Artist: { }
+                            Artist: {playingSong().artist}
                         </Typography>
                         <Box sx={{
                             display: 'flex',

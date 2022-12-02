@@ -6,7 +6,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-
+import { Modal } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { List } from '@mui/material';
+import SongCard from './SongCard';
+import MUIEditSongModal from './MUIEditSongModal';
+import MUIRemoveSongModal from './MUIRemoveSongModal';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -18,7 +27,9 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, is_expanded, setExpanded } = props;
+
+    let songs = store.currentList ? (store.currentList.songs ? store.currentList.songs : []) : []
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -31,6 +42,8 @@ function ListCard(props) {
 
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
+            //setText("Joe");
+            //setText("");
         }
     }
 
@@ -51,6 +64,9 @@ function ListCard(props) {
         event.stopPropagation();
         let _id = event.target.id;
         _id = ("" + _id).substring("delete-list-".length);
+        if (id == null) {
+            id = _id;
+        }
         store.markListForDeletion(id);
     }
 
@@ -65,6 +81,12 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    const handleChange = (isExpanded, panel) => {
+        console.log("panel: " + panel);
+        console.log("expanded: " + is_expanded)
+        setExpanded(isExpanded ? panel : false);
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -73,31 +95,81 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
+
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
+    }
+
+
+    console.log("Songs: " + songs);
+
+
     let cardElement =
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{borderRadius:"25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
-            style={{transform:"translate(1%,0%)", width: '98%', fontSize: '48pt' }}
+            sx={{ borderRadius: "25px", p: "10px", bgcolor: '#8000F00F', marginTop: '15px', display: 'flex', p: 1 }}
+            style={{ transform: "translate(1%,0%)", width: '98%', fontSize: '48pt' }}
             button
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}
+        //onClick={(event) => {
+        //   handleExpand();
+        //}}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}} />
-                </IconButton>
-            </Box>
-            <Box sx={{ p: 1 }}>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
-                </IconButton>
-            </Box>
-        </ListItem>
+
+            <Accordion
+                onChange={(event, isExpanded) => {
+                    handleLoadList(event, idNamePair._id);
+                    handleChange(isExpanded, idNamePair._id);
+                }}
+                sx={{ width: "100%" }}
+                expanded={is_expanded === idNamePair._id}
+            >
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={"panel-content-" + idNamePair._id}
+                    id={"panel-header-" + idNamePair._id}
+                >
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                            <EditIcon style={{ fontSize: '48pt' }} />
+                        </IconButton>
+                    </Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={(event) => {
+                            handleDeleteList(event, idNamePair._id)
+                        }} aria-label='delete'>
+                            <DeleteIcon style={{ fontSize: '48pt' }} />
+                        </IconButton>
+                    </Box>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Box>
+                        <List
+                            id="playlist-cards"
+                            sx={{ overflow: 'scroll', height: '100%', width: '100%', bgcolor: '#8000F00F' }}
+                        >
+                            {
+                                songs.map((song, index) => (
+                                    <SongCard
+                                        id={'playlist-song-' + (index)}
+                                        key={'playlist-song-' + (index)}
+                                        index={index}
+                                        song={song}
+                                    />
+                                ))
+                            }
+                        </List>
+                        {modalJSX}
+                    </Box>
+                </AccordionDetails>
+            </Accordion>
+
+        </ListItem >
 
     if (editActive) {
         cardElement =
@@ -113,8 +185,8 @@ function ListCard(props) {
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}
                 defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
+                inputProps={{ style: { fontSize: 48 } }}
+                InputLabelProps={{ style: { fontSize: 24 } }}
                 autoFocus
             />
     }

@@ -2,9 +2,9 @@ import React from 'react';
 import YouTube from 'react-youtube';
 
 export default function YoutubePlayer(props) {
-    const video = "NLphEFOyoqM";
+    let video = "NLphEFOyoqM";
     if (props.videoId) {
-        video = props.videoId;
+        video = props.videoId.youTubeId;
     }
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
     // YOUTUBE PLAYER AND EMBED IT IN YOUR SITE. IT ALSO

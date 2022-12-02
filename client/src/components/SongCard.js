@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
-    const [ draggedTo, setDraggedTo ] = useState(0);
+    const [draggedTo, setDraggedTo] = useState(0);
     const { song, index } = props;
 
     function handleDragStart(event) {
@@ -39,6 +39,10 @@ function SongCard(props) {
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
+        if(event.detail === 1){
+            console.log("single clicked");
+            store.setSong(index, song);
+        }
         if (event.detail === 2) {
             console.log("double clicked");
             store.showEditSongModal(index, song);
@@ -67,7 +71,7 @@ function SongCard(props) {
                 {song.title} by {song.artist}
             </a>
             <Button
-                sx={{transform:"translate(-5%, -5%)", width:"5px", height:"30px"}}
+                sx={{ transform: "translate(-5%, -5%)", width: "5px", height: "30px" }}
                 variant="contained"
                 id={"remove-song-" + index}
                 className="list-card-button"

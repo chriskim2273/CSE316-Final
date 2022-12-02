@@ -49,21 +49,12 @@ const App = () => {
             <AuthContextProvider>
                 <GlobalStoreContextProvider>
                     <AppBanner />
-
-                    <ToolBar />
-                    <Box sx={{ display: 'flex' }}>
-                        <Box sx={{ width: 900, height: 700 }}>
-                            <Switch>
-                                <Route path="/" exact component={HomeWrapper} />
-                                <Route path="/login/" exact component={LoginScreen} />
-                                <Route path="/register/" exact component={RegisterScreen} />
-                                <Route path="/playlist/:id" exact component={WorkspaceScreen} />
-                            </Switch>
-                        </Box>
-                        <Box sx={{ width: 500, height: 700 }}>
-                            <SongWindow />
-                        </Box>
-                    </Box>
+                    <Switch>
+                        <Route path="/" exact component={HomeWrapper} />
+                        <Route path="/login/" exact component={LoginScreen} />
+                        <Route path="/register/" exact component={RegisterScreen} />
+                        <Route path="/playlist/:id" exact component={WorkspaceScreen} />
+                    </Switch>
                     <Statusbar />
                 </GlobalStoreContextProvider>
             </AuthContextProvider>
