@@ -50,6 +50,7 @@ export const publishPlaylist = (listName, songsList, userEmail, userName) => {
         likes: [],
         dislikes: [],
         comments: [],
+        listens: 0,
     })
 }
 
@@ -64,7 +65,10 @@ export const addPublishedComment = (id, text, author) => api.put(`/published_add
     author: author
 })
 
+export const addListen = (id) => api.put(`/published_addlisten/${id}`)
+
 const apis = {
+    addListen,
     publishPlaylist,
     createPlaylist,
     deletePlaylistById,

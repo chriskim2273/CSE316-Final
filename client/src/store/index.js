@@ -456,6 +456,28 @@ function GlobalStoreContextProvider(props) {
             console.log("API FAILED TO ADD COMMENT TO PUBLISHED LIST");
         }
     }
+
+    store.addListen = async function () {
+        if (store.currentList != null) {
+            const response = await api.addListen(store.currentList._id);
+            if (response.status === 201) {
+                tps.clearAllTransactions();
+                storeReducer({
+                    type: GlobalStoreActionType.ADD_RATING,
+                    payload: null
+                })
+
+                // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+                //history.push("/playlist/" + newList._id);
+                //history.push("/joe/");
+                //history.push("/published");
+            }
+            else {
+                console.log("API FAILED TO ADD LISTEN TO PUBLISHED LIST");
+            }
+        }
+    }
+
     store.closeCurrentPublishedList = function () {
         storeReducer({
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,

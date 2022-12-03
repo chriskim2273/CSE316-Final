@@ -201,6 +201,45 @@ addRating = async (req, res) => {
     })
 }
 
+addListen = async (req, res) => {
+    // Maybe remove
+    /*
+    if (auth.verifyUser(req) === null) {
+        return res.status(400).json({
+            errorMessage: 'UNAUTHORIZED'
+        })
+    }
+    */
+
+    Published.findOne({ _id: req.params.id }, (err, list) => {
+        console.log("playlist found: " + JSON.stringify(list));
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'Playlist not found!',
+            });
+        }
+        list.listens = list.listens + 1;
+        list.save()
+            .then(() => {
+                console.log("SUCCESS!!!");
+                return res.status(201).json({
+                    success: true,
+                    id: list._id,
+                    message: 'View added!',
+                })
+            })
+            .catch(error => {
+                console.log("FAILURE: " + JSON.stringify(error));
+                return res.status(404).json({
+                    error,
+                    message: 'View not added!',
+                });
+            });
+    }
+    );
+}
+
 addComment = async (req, res) => {
     if (auth.verifyUser(req) === null) {
         return res.status(400).json({
@@ -395,6 +434,7 @@ getPublisheds = async (req, res) => {
 }
 
 module.exports = {
+    addListen,
     publishList,
     unpublishList,
     addRating,

@@ -26,7 +26,8 @@ const publishedListSchema = new Schema(
                 author: String,
                 date: Date
             }], required: true
-        }
+        },
+        listens: { type: Number, required: true },
     },
     { timestamps: true },
 )

@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -184,7 +185,23 @@ function PublishedCard(props) {
     function handleAddRating(event, rating) {
         store.addRating(rating);
         //handleLoadList(event, idNamePair._id);
+    }
 
+    function returnPublishDate() {
+        if (store.currentList != null) {
+            if (store.currentList.createdAt != null) {
+                let dStr = new Date(store.currentList.createdAt).toDateString();
+                return dStr;
+            }
+        }
+    }
+
+    function returnListens() {
+        if (store.currentList != null) {
+            if (store.currentList.listens != null) {
+                return store.currentList.listens;
+            }
+        }
     }
     let cardElement =
         <ListItem
@@ -207,6 +224,7 @@ function PublishedCard(props) {
                     if (store.canClose()) {
                         handleClose();
                     }
+                    store.addListen();
                 }}
                 sx={{ width: "100%" }}
                 expanded={is_expanded === idNamePair._id && store.currentList != null}
@@ -256,6 +274,11 @@ function PublishedCard(props) {
                             <Box
                                 sx={{ display: 'flex' }}
                                 gap={1}>
+                                <Box>
+                                    <Typography>{"Posted on " + returnPublishDate()
+                                    }</Typography>
+                                    <Typography><VisibilityIcon />{" " + returnListens()}</Typography>
+                                </Box>
                                 <Button
                                     sx={{ display: 'flex' }}
                                     color={
