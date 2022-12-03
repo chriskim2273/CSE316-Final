@@ -31,7 +31,8 @@ export const GlobalStoreActionType = {
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
-    HIDE_MODALS: "HIDE_MODALS"
+    HIDE_MODALS: "HIDE_MODALS",
+    PUBLISH_NEW_LIST: "PUBLISH_NEW_LIST",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -110,6 +111,19 @@ function GlobalStoreContextProvider(props) {
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter + 1,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                })
+            }
+            case GlobalStoreActionType.PUBLISH_NEW_LIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null
@@ -315,6 +329,28 @@ function GlobalStoreContextProvider(props) {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
     }
+
+    store.publishPlaylist = async function (listName, songsList) {
+        const response = await api.publishPlaylist(listName, songsList, auth.user.email, auth.user.firstName + " " + auth.user.lastName);
+        if (response.status === 201) {
+            // Needed?
+            //tps.clearAllTransactions();
+
+            // CREATE MODAL
+
+            storeReducer({
+                type: GlobalStoreActionType.PUBLISH_NEW_LIST
+            }
+            );
+
+            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+            history.push("/FUCK/");
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+    }
+
 
     store.duplicateList = async function (title, songs) {
         let newListName = title;

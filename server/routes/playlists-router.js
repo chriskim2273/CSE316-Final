@@ -6,6 +6,7 @@
 */
 const express = require('express')
 const PlaylistController = require('../controllers/playlist-controller')
+const PublishedController = require('../controllers/published-controller')
 const router = express.Router()
 const auth = require('../auth')
 
@@ -15,5 +16,11 @@ router.get('/playlist/:id', auth.verify, PlaylistController.getPlaylistById)
 router.get('/playlistpairs', auth.verify, PlaylistController.getPlaylistPairs)
 router.get('/playlists', auth.verify, PlaylistController.getPlaylists)
 router.put('/playlist/:id', auth.verify, PlaylistController.updatePlaylist)
+
+router.post('/published', auth.verify, PublishedController.publishList)
+router.post('/published/:id', auth.verify, PublishedController.duplicatePublishedList)
+router.delete('/published/:id', auth.verify, PublishedController.unpublishList)
+router.put('/published_addrating/:id', auth.verify, PublishedController.addRating)
+router.put('/published_addcomment/:id', auth.verify, PublishedController.addComment)
 
 module.exports = router

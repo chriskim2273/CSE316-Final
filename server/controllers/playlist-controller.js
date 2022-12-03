@@ -1,3 +1,4 @@
+const Published = require('../models/published-model')
 const Playlist = require('../models/playlist-model')
 const User = require('../models/user-model');
 const auth = require('../auth')
@@ -8,8 +9,9 @@ const auth = require('../auth')
     
     @author McKilla Gorilla
 */
+
 createPlaylist = (req, res) => {
-    if(auth.verifyUser(req) === null){
+    if (auth.verifyUser(req) === null) {
         return res.status(400).json({
             errorMessage: 'UNAUTHORIZED'
         })
@@ -22,7 +24,7 @@ createPlaylist = (req, res) => {
             error: 'You must provide a Playlist',
         })
     }
-    
+
     const playlist = new Playlist(body);
     console.log("playlist: " + playlist.toString());
     if (!playlist) {
@@ -51,7 +53,7 @@ createPlaylist = (req, res) => {
     })
 }
 deletePlaylist = async (req, res) => {
-    if(auth.verifyUser(req) === null){
+    if (auth.verifyUser(req) === null) {
         return res.status(400).json({
             errorMessage: 'UNAUTHORIZED'
         })
@@ -79,8 +81,8 @@ deletePlaylist = async (req, res) => {
                 }
                 else {
                     console.log("incorrect user!");
-                    return res.status(400).json({ 
-                        errorMessage: "authentication error" 
+                    return res.status(400).json({
+                        errorMessage: "authentication error"
                     });
                 }
             });
@@ -89,7 +91,7 @@ deletePlaylist = async (req, res) => {
     })
 }
 getPlaylistById = async (req, res) => {
-    if(auth.verifyUser(req) === null){
+    if (auth.verifyUser(req) === null) {
         return res.status(400).json({
             errorMessage: 'UNAUTHORIZED'
         })
@@ -121,7 +123,7 @@ getPlaylistById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getPlaylistPairs = async (req, res) => {
-    if(auth.verifyUser(req) === null){
+    if (auth.verifyUser(req) === null) {
         return res.status(400).json({
             errorMessage: 'UNAUTHORIZED'
         })
@@ -162,7 +164,7 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getPlaylists = async (req, res) => {
-    if(auth.verifyUser(req) === null){
+    if (auth.verifyUser(req) === null) {
         return res.status(400).json({
             errorMessage: 'UNAUTHORIZED'
         })
@@ -180,7 +182,7 @@ getPlaylists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 updatePlaylist = async (req, res) => {
-    if(auth.verifyUser(req) === null){
+    if (auth.verifyUser(req) === null) {
         return res.status(400).json({
             errorMessage: 'UNAUTHORIZED'
         })

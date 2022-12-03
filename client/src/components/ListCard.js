@@ -78,6 +78,13 @@ function ListCard(props) {
         store.markListForDeletion(id);
     }
 
+    async function handlePublishList(event) {
+        if (store.currentList != "null") {
+            event.stopPropagation();
+            store.publishPlaylist(store.currentList.name, store.currentList.songs);
+        }
+    }
+
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
@@ -148,8 +155,10 @@ function ListCard(props) {
             <Accordion
                 onChange={(event, isExpanded) => {
                     handleChange(isExpanded, idNamePair._id);
-                    handleLoadList(event, idNamePair._id);
-                    if (store.canClose() && isExpanded) {
+                    if (isExpanded) {
+                        handleLoadList(event, idNamePair._id);
+                    }
+                    if (store.canClose()) {
                         handleClose();
                     }
                 }}
@@ -224,7 +233,12 @@ function ListCard(props) {
                                 >Redo</Button>
                             </Box>
                             <Box>
-                                <Button>Publish</Button>
+                                <Button
+                                    onClick={(event) => {
+                                        handlePublishList(event);
+                                        //handleDeleteList(event, idNamePair._id)
+                                        setExpanded(false);
+                                    }}>Publish</Button>
                                 <Button
                                     onClick={(event) => {
                                         handleDeleteList(event, idNamePair._id)

@@ -10,6 +10,7 @@ const publishedListSchema = new Schema(
     {
         name: { type: String, required: true },
         ownerEmail: { type: String, required: true },
+        ownerName: { type: String, required: true },
         songs: {
             type: [{
                 title: String,
@@ -17,8 +18,8 @@ const publishedListSchema = new Schema(
                 youTubeId: String
             }], required: true
         },
-        likes: { type: Number, required: true },
-        dislikes: { type: Number, required: true },
+        likes: { type: [{ user: String }], required: true },
+        dislikes: { type: [{ user: String }], required: true },
         comments: {
             type: [{
                 text: String,
@@ -30,4 +31,4 @@ const publishedListSchema = new Schema(
     { timestamps: true },
 )
 
-module.exports = mongoose.model('PublishedList', publishedListSchema)
+module.exports = mongoose.model('Published', publishedListSchema)

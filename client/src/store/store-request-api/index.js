@@ -36,11 +36,25 @@ export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
 export const updatePlaylistById = (id, playlist) => {
     return api.put(`/playlist/${id}`, {
         // SPECIFY THE PAYLOAD
-        playlist : playlist
+        playlist: playlist
+    })
+}
+
+export const publishPlaylist = (listName, songsList, userEmail, userName) => {
+    return api.post(`/published/`, {
+        // SPECIFY THE PAYLOAD
+        name: listName,
+        songs: songsList,
+        ownerEmail: userEmail,
+        ownerName: userName,
+        likes: [],
+        dislikes: [],
+        comments: [],
     })
 }
 
 const apis = {
+    publishPlaylist,
     createPlaylist,
     deletePlaylistById,
     getPlaylistById,
