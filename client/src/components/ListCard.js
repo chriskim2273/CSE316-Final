@@ -80,8 +80,9 @@ function ListCard(props) {
 
     async function handlePublishList(event) {
         if (store.currentList != "null") {
-            event.stopPropagation();
+            store.deleteList(idNamePair._id);
             store.publishPlaylist(store.currentList.name, store.currentList.songs);
+
         }
     }
 
@@ -227,7 +228,6 @@ function ListCard(props) {
                                 <Button
                                     onClick={(event) => {
                                         handlePublishList(event);
-                                        handleDeleteList(event, idNamePair._id)
                                         setExpanded(false);
                                     }}>Publish</Button>
                                 <Button
