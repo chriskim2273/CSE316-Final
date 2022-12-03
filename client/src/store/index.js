@@ -26,6 +26,7 @@ export const GlobalStoreActionType = {
     CLOSE_CURRENT_LIST: "CLOSE_CURRENT_LIST",
     CREATE_NEW_LIST: "CREATE_NEW_LIST",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
+    LOAD_PUBLISHED_ID_NAME_PAIRS: "LOAD_PUBLISHED_ID_NAME_PAIRS",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
@@ -33,6 +34,7 @@ export const GlobalStoreActionType = {
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS",
     PUBLISH_NEW_LIST: "PUBLISH_NEW_LIST",
+    ADD_RATING: "ADD_RATING",
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -53,6 +55,7 @@ function GlobalStoreContextProvider(props) {
     const [store, setStore] = useState({
         currentModal: CurrentModal.NONE,
         idNamePairs: [],
+        publishedIdNamePairs: [],
         currentList: null,
         currentSongIndex: -1,
         currentSong: null,
@@ -79,6 +82,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: payload.playlist,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -93,6 +97,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -107,6 +112,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -120,9 +126,24 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                })
+            }
+            case GlobalStoreActionType.ADD_RATING: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
+                    currentList: payload,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: store.currentSong,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -134,6 +155,21 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: payload,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                });
+            }
+            case GlobalStoreActionType.LOAD_PUBLISHED_ID_NAME_PAIRS: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: payload,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -148,6 +184,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -162,6 +199,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -176,6 +214,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: payload,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -190,6 +229,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.EDIT_SONG,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
@@ -203,6 +243,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.REMOVE_SONG,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
@@ -216,6 +257,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: payload.currentSongIndex,
                     currentSong: payload.currentSong,
@@ -229,6 +271,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
                     currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -307,6 +350,35 @@ function GlobalStoreContextProvider(props) {
         history.push("/");
     }
 
+    store.addRating = async function (rating) {
+        console.log("AUTHUSER" + JSON.stringify(auth.user));
+        const response = await api.addPublishedRating(store.currentList._id, auth.user.email, rating);
+        console.log("addPublishedRating response: " + response);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            storeReducer({
+                type: GlobalStoreActionType.ADD_RATING,
+                payload: null
+            })
+
+            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+            //history.push("/playlist/" + newList._id);
+            //history.push("/joe/");
+            //history.push("/published");
+        }
+        else {
+            console.log("API FAILED TO ADD RATING TO PUBLISHED LIST");
+        }
+    }
+
+    store.closeCurrentPublishedList = function () {
+        storeReducer({
+            type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
+            payload: {}
+        });
+        tps.clearAllTransactions();
+        history.push("/published/");
+    }
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
@@ -392,6 +464,24 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncLoadIdNamePairs();
+    }
+
+    store.loadPublishedIdNamePairs = function () {
+        async function asyncLoadPublishedIdNamePairs() {
+            const response = await api.getPublishedPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadPublishedIdNamePairs();
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
@@ -485,6 +575,21 @@ function GlobalStoreContextProvider(props) {
                     });
                     //history.push("/playlist/" + playlist._id);
                 }
+            }
+        }
+        asyncSetCurrentList(id);
+    }
+
+    store.setCurrentPublishedList = function (id) {
+        async function asyncSetCurrentList(id) {
+            let response = await api.getPublishedById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: playlist
+                });
             }
         }
         asyncSetCurrentList(id);

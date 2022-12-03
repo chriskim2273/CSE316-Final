@@ -26,11 +26,12 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
     
     @author McKilla Gorilla
 */
-function ListCard(props) {
+function PublishedCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const [updatedList, setUpdatedList] = useState(false);
+
     function refreshOnUpdate() {
         setUpdatedList(!updatedList);
     }
@@ -49,7 +50,7 @@ function ListCard(props) {
             console.log("load " + event.target.id);
 
             // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
+            store.setCurrentPublishedList(id);
             //setText("Joe");
             //setText("");
         }
@@ -136,10 +137,55 @@ function ListCard(props) {
         store.redo();
     }
     function handleClose() {
-        store.closeCurrentList();
+        store.closeCurrentPublishedList();
     }
 
+    const getLikesAndDislikes = () => {
+        if (store.currentList != null) {
+            if (store.currentList.likes != null && store.currentList.dislikes != null) {
+                return {
+                    likes: store.currentList.likes.length,
+                    dislikes: store.currentList.dislikes.length
+                }
+            }
+        }
+        else {
+            return {
+                likes: "?",
+                dislikes: "?"
+            }
+        }
+    }
 
+    const buttonDisabled = (likeButton) => {
+        if (store.currentList != null) {
+            if (likeButton) {
+                if (store.currentList.likes != null) {
+                    if (store.currentList.likes.includes(auth.user.email)) {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+            else {
+                if (store.currentList.dislikes != null) {
+                    if (store.currentList.dislikes.includes(auth.user.email)) {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function handleAddRating(event, rating) {
+        store.addRating(rating);
+        //handleLoadList(event, idNamePair._id);
+
+    }
     let cardElement =
         <ListItem
             id={idNamePair._id}
@@ -176,11 +222,6 @@ function ListCard(props) {
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
                         <Typography> By {auth.getUserName().firstName + " " + auth.getUserName().lastName} </Typography>
                     </Box>
-                    <Box sx={{ p: 1 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <EditIcon style={{ fontSize: '48pt' }} />
-                        </IconButton>
-                    </Box>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Box>
@@ -195,16 +236,10 @@ function ListCard(props) {
                                         key={'playlist-song-' + (index)}
                                         index={index}
                                         song={song}
-                                        removable={true}
+                                        removable={false}
                                     />
                                 ))
                             }
-                            <ListItem>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleAddNewSong}
-                                >+</Button>
-                            </ListItem>
                         </List>
                         <Grid
                             container
@@ -214,31 +249,35 @@ function ListCard(props) {
                         >
                             <Box>
                                 <Button
-                                    disabled={!store.canUndo()}
-                                    onClick={handleUndo}
-                                >
-                                    Undo</Button>
-                                <Button
-                                    disabled={!store.canRedo()}
-                                    onClick={handleRedo}
-                                >Redo</Button>
-                            </Box>
-                            <Box>
-                                <Button
-                                    onClick={(event) => {
-                                        handlePublishList(event);
-                                        handleDeleteList(event, idNamePair._id)
-                                        setExpanded(false);
-                                    }}>Publish</Button>
-                                <Button
-                                    onClick={(event) => {
-                                        handleDeleteList(event, idNamePair._id)
-                                        setExpanded(false);
-                                    }}>Delete</Button>
-                                <Button
                                     onClick={(event) => {
                                         handleDuplicateList(store.currentList.name, store.currentList.songs);
                                     }}>Duplicate</Button>
+                            </Box>
+                            <Box
+                                sx={{ display: 'flex' }}
+                                gap={1}>
+                                <Button
+                                    sx={{ display: 'flex' }}
+                                    color={
+                                        buttonDisabled(true) ? "secondary" : "primary"
+                                    }
+                                    onClick={(event) => {
+                                        handleAddRating(event, 1);
+                                    }}>
+                                    <ThumbUpIcon />
+                                    <Typography>{getLikesAndDislikes().likes}</Typography>
+                                </Button>
+                                <Button
+                                    sx={{ display: 'flex' }}
+                                    color={
+                                        buttonDisabled(false) ? "secondary" : "primary"
+                                    }
+                                    onClick={(event) => {
+                                        handleAddRating(event, -1);
+                                    }}>
+                                    <ThumbDownIcon />
+                                    <Typography>{getLikesAndDislikes().dislikes}</Typography>
+                                </Button>
                             </Box>
                         </Grid>
                         {modalJSX}
@@ -272,4 +311,4 @@ function ListCard(props) {
     );
 }
 
-export default ListCard;
+export default PublishedCard;

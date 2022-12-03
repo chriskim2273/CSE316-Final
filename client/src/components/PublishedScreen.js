@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
+import PublishedCard from './PublishedCard';
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -18,7 +19,7 @@ const PublishedScreen = (props) => {
     const { searchText } = props;
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        store.loadPublishedIdNamePairs();
     }, []);
 
     function handleCreateNewList() {
@@ -31,7 +32,7 @@ const PublishedScreen = (props) => {
                 {
                     store.idNamePairs.map((pair) => {
                         if (pair.name.toLowerCase().includes(searchText.toLowerCase())) {
-                            return (<ListCard
+                            return (<PublishedCard
                                 key={pair._id}
                                 idNamePair={pair}
                                 selected={false}
@@ -42,14 +43,6 @@ const PublishedScreen = (props) => {
                     })
 
                 }
-                <Fab sx={{ transform: "translate(1150%, 10%)" }}
-                    color="primary"
-                    aria-label="add"
-                    id="add-list-button"
-                    onClick={handleCreateNewList}
-                >
-                    <AddIcon />
-                </Fab>
             </List>;
     }
     return (

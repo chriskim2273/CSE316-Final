@@ -18,8 +18,8 @@ const publishedListSchema = new Schema(
                 youTubeId: String
             }], required: true
         },
-        likes: { type: [{ user: String }], required: true },
-        dislikes: { type: [{ user: String }], required: true },
+        likes: { type: [String], required: true },
+        dislikes: { type: [String], required: true },
         comments: {
             type: [{
                 text: String,

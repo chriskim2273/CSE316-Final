@@ -53,12 +53,23 @@ export default function SongWindow() {
             return "";
         }
     }
+
+    const commentsEnabled = () => {
+        if (store.currentList != null) {
+
+            console.log("CL: " + JSON.stringify(store.currentList));
+            if (store.currentList.comments == null) {
+                return true;
+            }
+        }
+        return false;
+    }
     return (
         <TabContext value={tab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleTabChange} aria-label="lab API tabs example">
                     <Tab label="Player" value="1" />
-                    <Tab label="Comments" value="2" />
+                    <Tab label="Comments" value="2" disabled={commentsEnabled()} />
                 </TabList>
             </Box>
             <TabPanel value="1">

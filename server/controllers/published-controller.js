@@ -112,6 +112,9 @@ addRating = async (req, res) => {
         })
     }
 
+    let userId = req.params.userid;
+    console.log("USERID: " + userId);
+
     Published.findOne({ _id: req.params.id }, (err, playlist) => {
         console.log("playlist found: " + JSON.stringify(playlist));
         if (err) {
@@ -123,24 +126,58 @@ addRating = async (req, res) => {
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
-                if (user._id == req.userId) {
+            await User.findOne({ email: userId }, (err, user) => {
+                if (err) {
+                    console.log("USER NOT FOUND OMG")
+                    return res.status(404).json({
+                        err,
+                        message: 'User not found',
+                    })
+                }
+                if (user._id) {
                     console.log("correct user!");
                     console.log("req.body.name: " + req.body.name);
 
-                    if (req.body.rating == 1 && !list.likes.includes(user._id)) {
-                        list.likes.append(user._id);
+                    if (req.body.rating == 1) {
+                        if (!list.likes.includes(userId)) {
+                            if (list.dislikes.includes(userId)) {
+                                let index = list.dislikes.indexOf(userId);
+                                if (index > -1) { // only splice array when item is found
+                                    list.dislikes.splice(index, 1); // 2nd parameter means remove one item only
+                                }
+                            }
+                            list.likes.push(userId);
+                        }
+                        else {
+                            let index = list.likes.indexOf(userId);
+                            if (index > -1) { // only splice array when item is found
+                                list.likes.splice(index, 1); // 2nd parameter means remove one item only
+                            }
+                        }
                     }
-                    else if (req.body.rating == -1 && !list.dislikes.includes(user._id)) {
-                        list.dislikes.append(user._id);
+                    else if (req.body.rating == -1) {
+
+                        if (!list.dislikes.includes(userId)) {
+                            if (list.likes.includes(userId)) {
+                                let index = list.likes.indexOf(userId);
+                                if (index > -1) { // only splice array when item is found
+                                    list.likes.splice(index, 1); // 2nd parameter means remove one item only
+                                }
+                            }
+                            list.dislikes.push(userId);
+                        }
+                        else {
+                            let index = list.dislikes.indexOf(userId);
+                            if (index > -1) { // only splice array when item is found
+                                list.dislikes.splice(index, 1); // 2nd parameter means remove one item only
+                            }
+                        }
                     }
                     list
                         .save()
                         .then(() => {
                             console.log("SUCCESS!!!");
-                            return res.status(200).json({
+                            return res.status(201).json({
                                 success: true,
                                 id: list._id,
                                 message: 'Rating added!',
@@ -190,6 +227,7 @@ addComment = async (req, res) => {
             })
         }
 
+        let body = req.body
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
@@ -197,11 +235,10 @@ addComment = async (req, res) => {
                 console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
                     console.log("correct user!");
-                    console.log("req.body.name: " + req.body.name);
 
                     list.comments.append({
-                        text: req.comment.text,
-                        author: req.comment.author,
+                        text: body.text,
+                        author: body.author,
                         date: new Date()
                     })
 
@@ -293,10 +330,105 @@ duplicatePublishedList = (req, res) => {
     })
 }
 
+getPublishedById = async (req, res) => {
+    if (auth.verifyUser(req) === null) {
+        return res.status(400).json({
+            errorMessage: 'UNAUTHORIZED'
+        })
+    }
+    console.log("Find Playlist with id: " + JSON.stringify(req.params.id));
+
+    await Published.findById({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found list: " + JSON.stringify(list));
+
+        // DOES THIS LIST BELONG TO THIS USER?
+        async function asyncFindUser(list) {
+            await User.findOne({ email: list.ownerEmail }, (err, user) => {
+                console.log("user._id: " + user._id);
+                console.log("req.userId: " + req.userId);
+                if (user._id == req.userId) {
+                    console.log("correct user!");
+                    return res.status(200).json({ success: true, playlist: list })
+                }
+                else {
+                    console.log("incorrect user!");
+                    return res.status(400).json({ success: false, description: "authentication error" });
+                }
+            });
+        }
+        asyncFindUser(list);
+    }).catch(err => console.log(err))
+}
+getPublishedPairs = async (req, res) => {
+    if (auth.verifyUser(req) === null) {
+        return res.status(400).json({
+            errorMessage: 'UNAUTHORIZED'
+        })
+    }
+    console.log("getPlaylistPairs");
+    await User.findOne({ _id: req.userId }, (err, user) => {
+        console.log("find user with id " + req.userId);
+        async function asyncFindList(email) {
+            console.log("find all Playlists owned by " + email);
+            await Published.find({ ownerEmail: email }, (err, playlists) => {
+                console.log("found Playlists: " + JSON.stringify(playlists));
+                if (err) {
+                    return res.status(400).json({ success: false, error: err })
+                }
+                if (!playlists) {
+                    console.log("!playlists.length");
+                    return res
+                        .status(404)
+                        .json({ success: false, error: 'Playlists not found' })
+                }
+                else {
+                    console.log("Send the Playlist pairs");
+                    // PUT ALL THE LISTS INTO ID, NAME PAIRS
+                    let pairs = [];
+                    for (let key in playlists) {
+                        let list = playlists[key];
+                        let pair = {
+                            _id: list._id,
+                            name: list.name
+                        };
+                        pairs.push(pair);
+                    }
+                    return res.status(200).json({ success: true, idNamePairs: pairs })
+                }
+            }).catch(err => console.log(err))
+        }
+        asyncFindList(user.email);
+    }).catch(err => console.log(err))
+}
+getPublisheds = async (req, res) => {
+    if (auth.verifyUser(req) === null) {
+        return res.status(400).json({
+            errorMessage: 'UNAUTHORIZED'
+        })
+    }
+    await Published.find({}, (err, playlists) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!playlists.length) {
+            return res
+                .status(404)
+                .json({ success: false, error: `Playlists not found` })
+        }
+        return res.status(200).json({ success: true, data: playlists })
+    }).catch(err => console.log(err))
+}
+
 module.exports = {
     publishList,
     unpublishList,
     addRating,
     addComment,
-    duplicatePublishedList
+    duplicatePublishedList,
+    getPublishedById,
+    getPublishedPairs,
+    getPublisheds
 }

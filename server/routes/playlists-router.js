@@ -20,7 +20,10 @@ router.put('/playlist/:id', auth.verify, PlaylistController.updatePlaylist)
 router.post('/published', auth.verify, PublishedController.publishList)
 router.post('/published/:id', auth.verify, PublishedController.duplicatePublishedList)
 router.delete('/published/:id', auth.verify, PublishedController.unpublishList)
-router.put('/published_addrating/:id', auth.verify, PublishedController.addRating)
+router.put('/published_addrating/:id/:userid', auth.verify, PublishedController.addRating)
 router.put('/published_addcomment/:id', auth.verify, PublishedController.addComment)
+router.get('/published/:id', auth.verify, PublishedController.getPublishedById)
+router.get('/publishedpairs', auth.verify, PublishedController.getPublishedPairs)
+router.get('/publisheds', auth.verify, PublishedController.getPublisheds)
 
 module.exports = router

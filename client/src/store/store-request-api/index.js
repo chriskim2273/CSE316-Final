@@ -53,13 +53,28 @@ export const publishPlaylist = (listName, songsList, userEmail, userName) => {
     })
 }
 
+
+export const getPublishedById = (id) => api.get(`/published/${id}`)
+export const getPublishedPairs = () => api.get(`/publishedpairs/`)
+export const addPublishedRating = (id, userid, rating) => api.put(`/published_addrating/${id}/${userid}`, {
+    rating: rating
+})
+export const addPublishedComment = (id, text, author) => api.put(`/published_addcomment/${id}`, {
+    text: text,
+    author: author
+})
+
 const apis = {
     publishPlaylist,
     createPlaylist,
     deletePlaylistById,
     getPlaylistById,
     getPlaylistPairs,
-    updatePlaylistById
+    updatePlaylistById,
+    getPublishedById,
+    getPublishedPairs,
+    addPublishedRating,
+    addPublishedComment
 }
 
 export default apis
