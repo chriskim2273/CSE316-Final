@@ -16,6 +16,7 @@ import WorkspaceScreen from './WorkspaceScreen'
 import ToolBar from './ToolBar'
 import YoutubePlayer from './YoutubePlayer.js'
 import SongWindow from './SongWindow'
+import Comments from './Comments'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -23,6 +24,7 @@ import SongWindow from './SongWindow'
     @author McKilla Gorilla
 */
 export {
+    Comments,
     SongWindow,
     YoutubePlayer,
     ToolBar,

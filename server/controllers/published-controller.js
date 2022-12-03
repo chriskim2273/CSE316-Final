@@ -228,46 +228,37 @@ addComment = async (req, res) => {
         }
 
         let body = req.body
-        // DOES THIS LIST BELONG TO THIS USER?
-        async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
-                if (user._id == req.userId) {
-                    console.log("correct user!");
 
-                    list.comments.append({
-                        text: body.text,
-                        author: body.author,
-                        date: new Date()
-                    })
+        playlist.comments.push({
+            text: body.text,
+            author: body.author,
+            date: new Date()
+        })
 
-                    list
-                        .save()
-                        .then(() => {
-                            console.log("SUCCESS!!!");
-                            return res.status(200).json({
-                                success: true,
-                                id: list._id,
-                                message: 'Comment added!',
-                            })
-                        })
-                        .catch(error => {
-                            console.log("FAILURE: " + JSON.stringify(error));
-                            return res.status(404).json({
-                                error,
-                                message: 'Comment not added!',
-                            })
-                        })
-                }
-                else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }
+        playlist
+            .save()
+            .then(() => {
+                console.log("SUCCESS!!!");
+                return res.status(200).json({
+                    success: true,
+                    id: playlist._id,
+                    message: 'Comment added!',
+                })
+            })
+            .catch(error => {
+                console.log("FAILURE: " + JSON.stringify(error));
+                return res.status(404).json({
+                    error,
+                    message: 'Comment not added!',
+                })
             });
-        }
-        asyncFindUser(playlist);
-    })
+    }).catch(error => {
+        console.log("FAILURE: " + JSON.stringify(error));
+        return res.status(404).json({
+            error,
+            message: 'Comment not added!',
+        })
+    });
 }
 
 duplicatePublishedList = (req, res) => {
@@ -345,22 +336,8 @@ getPublishedById = async (req, res) => {
         console.log("Found list: " + JSON.stringify(list));
 
         // DOES THIS LIST BELONG TO THIS USER?
-        async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
-                if (user._id == req.userId) {
-                    console.log("correct user!");
-                    return res.status(200).json({ success: true, playlist: list })
-                }
-                else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }
-            });
-        }
-        asyncFindUser(list);
-    }).catch(err => console.log(err))
+        return res.status(200).json({ success: true, playlist: list })
+    }).catch(err => { return res.status(400).json({ success: false, description: "failed to get published list by id" }) });
 }
 getPublishedPairs = async (req, res) => {
     if (auth.verifyUser(req) === null) {
@@ -368,40 +345,35 @@ getPublishedPairs = async (req, res) => {
             errorMessage: 'UNAUTHORIZED'
         })
     }
-    console.log("getPlaylistPairs");
-    await User.findOne({ _id: req.userId }, (err, user) => {
-        console.log("find user with id " + req.userId);
-        async function asyncFindList(email) {
-            console.log("find all Playlists owned by " + email);
-            await Published.find({ ownerEmail: email }, (err, playlists) => {
-                console.log("found Playlists: " + JSON.stringify(playlists));
-                if (err) {
-                    return res.status(400).json({ success: false, error: err })
+    async function asyncFindList() {
+        await Published.find({}, (err, playlists) => {
+            console.log("found Playlists: " + JSON.stringify(playlists));
+            if (err) {
+                return res.status(400).json({ success: false, error: err })
+            }
+            if (!playlists) {
+                console.log("!playlists.length");
+                return res
+                    .status(404)
+                    .json({ success: false, error: 'Playlists not found' })
+            }
+            else {
+                console.log("Send the Playlist pairs");
+                // PUT ALL THE LISTS INTO ID, NAME PAIRS
+                let pairs = [];
+                for (let key in playlists) {
+                    let list = playlists[key];
+                    let pair = {
+                        _id: list._id,
+                        name: list.name
+                    };
+                    pairs.push(pair);
                 }
-                if (!playlists) {
-                    console.log("!playlists.length");
-                    return res
-                        .status(404)
-                        .json({ success: false, error: 'Playlists not found' })
-                }
-                else {
-                    console.log("Send the Playlist pairs");
-                    // PUT ALL THE LISTS INTO ID, NAME PAIRS
-                    let pairs = [];
-                    for (let key in playlists) {
-                        let list = playlists[key];
-                        let pair = {
-                            _id: list._id,
-                            name: list.name
-                        };
-                        pairs.push(pair);
-                    }
-                    return res.status(200).json({ success: true, idNamePairs: pairs })
-                }
-            }).catch(err => console.log(err))
-        }
-        asyncFindList(user.email);
-    }).catch(err => console.log(err))
+                return res.status(200).json({ success: true, idNamePairs: pairs })
+            }
+        }).catch(err => console.log(err))
+    }
+    asyncFindList();
 }
 getPublisheds = async (req, res) => {
     if (auth.verifyUser(req) === null) {

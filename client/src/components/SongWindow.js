@@ -15,6 +15,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import YoutubePlayer from './YoutubePlayer.js';
+import Comments from './Comments';
 
 
 export default function SongWindow() {
@@ -22,6 +23,11 @@ export default function SongWindow() {
 
     const [tab, setTab] = useState('1');
     const [youtubePlayer, setYoutubePlayer] = useState();
+    const [updateComment, setUpdateComment] = useState(true);
+
+    const refreshComments = () => {
+        setUpdateComment(!updateComment);
+    }
 
     const handleTabChange = (event, newTab) => {
         setTab(newTab);
@@ -158,7 +164,7 @@ export default function SongWindow() {
                     </Box>
                 </Box>
             </TabPanel>
-            <TabPanel value="2">Comments!</TabPanel>
+            <TabPanel value="2"><Comments refresher={refreshComments} /></TabPanel>
         </TabContext>
     )
 }

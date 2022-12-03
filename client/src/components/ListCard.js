@@ -19,6 +19,7 @@ import MUIRemoveSongModal from './MUIRemoveSongModal';
 import AuthContext from '../auth';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import MUIPublishListModal from './MUIPublishListModal';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -78,10 +79,12 @@ function ListCard(props) {
         store.markListForDeletion(id);
     }
 
-    async function handlePublishList(event) {
-        if (store.currentList != "null") {
-            store.deleteList(idNamePair._id);
-            store.publishPlaylist(store.currentList.name, store.currentList.songs);
+    async function handlePublishList(event, id) {
+        if (store.currentList != null) {
+            store.markListForPublication(id);
+            console.log("CURENT MODAL:" + store.currentModal)
+            //store.deleteList(idNamePair._id);
+            //store.publishPlaylist(store.currentList.name, store.currentList.songs);
 
         }
     }
@@ -118,6 +121,9 @@ function ListCard(props) {
     }
     else if (store.isRemoveSongModalOpen()) {
         modalJSX = <MUIRemoveSongModal />;
+    }
+    else if (store.isPublishListModalOpen()) {
+        modalJSX = <MUIPublishListModal />;
     }
 
 
@@ -227,7 +233,7 @@ function ListCard(props) {
                             <Box>
                                 <Button
                                     onClick={(event) => {
-                                        handlePublishList(event);
+                                        handlePublishList(event, idNamePair._id);
                                         setExpanded(false);
                                     }}>Publish</Button>
                                 <Button
