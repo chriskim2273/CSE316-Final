@@ -17,6 +17,8 @@ import ToolBar from './ToolBar'
 import YoutubePlayer from './YoutubePlayer.js'
 import SongWindow from './SongWindow'
 import Comments from './Comments'
+import PersonalScreen from './PersonalScreen'
+import PersonalScreenWrapper from './PersonalScreenWrapper'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -25,6 +27,8 @@ import Comments from './Comments'
 */
 export {
     Comments,
+    PersonalScreenWrapper,
+    PersonalScreen,
     SongWindow,
     YoutubePlayer,
     ToolBar,

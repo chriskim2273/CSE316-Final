@@ -2,9 +2,11 @@ import React from 'react';
 import YouTube from 'react-youtube';
 
 export default function YoutubePlayer(props) {
-    let video = "NO_VIDEO_CURRENTLY_PLAYING";
-    if (props.videoId) {
-        video = props.videoId.youTubeId;
+    let videos = ["NO_VIDEO_CURRENTLY_PLAYING"];
+    let videoIds = ["NO_VIDEO_CURRENTLY_PLAYING"];
+    if (props.videos) {
+        videos = props.videos;
+        videoIds = videos.map(x => x.youTubeId);
     }
     const { setPlayer } = props;
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
@@ -13,14 +15,13 @@ export default function YoutubePlayer(props) {
     // FROM ONE SONG TO THE NEXT
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let playlist = [
-        "NLphEFOyoqM",
-        "8RbXIMZmVv8",
-        "8UbNbor3OqQ"
-    ];
+    let playlist = videoIds;
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
     let currentSong = 0;
+    if (props.index) {
+        currentSong = props.index;
+    }
 
     const playerOptions = {
         height: 270,
@@ -34,7 +35,7 @@ export default function YoutubePlayer(props) {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = video;
+        let song = playlist[currentSong];
         player.loadVideoById(song);
         player.playVideo();
     }
@@ -82,7 +83,7 @@ export default function YoutubePlayer(props) {
     }
 
     return <YouTube
-        videoId={video}
+        videoId={playlist[currentSong]}
         opts={playerOptions}
         onReady={onPlayerReady}
         onStateChange={onPlayerStateChange} />;

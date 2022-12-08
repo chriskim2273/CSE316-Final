@@ -54,6 +54,7 @@ function PublishedCard(props) {
             store.setCurrentPublishedList(id);
             //setText("Joe");
             //setText("");
+
         }
     }
 
@@ -159,6 +160,9 @@ function PublishedCard(props) {
     }
 
     const buttonDisabled = (likeButton) => {
+        if (auth.user == null) {
+            return true;
+        }
         if (store.currentList != null) {
             if (likeButton) {
                 if (store.currentList.likes != null) {
@@ -203,6 +207,15 @@ function PublishedCard(props) {
             }
         }
     }
+
+    function returnAuthor() {
+        if (store.currentList != null) {
+            if (store.currentList.ownerName != null) {
+                return store.currentList.ownerName;
+            }
+        }
+    }
+
     let cardElement =
         <ListItem
             id={idNamePair._id}
@@ -238,11 +251,11 @@ function PublishedCard(props) {
                         sx={{ display: 'grid' }}
                     >
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
-                        <Typography> By {auth.getUserName().firstName + " " + auth.getUserName().lastName} </Typography>
                     </Box>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Box>
+                        <Typography> By {returnAuthor()} </Typography>
                         <List
                             id="playlist-cards"
                             sx={{ overflow: 'scroll', height: '35vh', width: '100%', bgcolor: '#8000F00F' }}

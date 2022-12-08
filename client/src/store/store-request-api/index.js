@@ -56,7 +56,7 @@ export const publishPlaylist = (listName, songsList, userEmail, userName) => {
 
 
 export const getPublishedById = (id) => api.get(`/published/${id}`)
-export const getPublishedPairs = () => api.get(`/publishedpairs/`)
+export const getPublishedPairs = (email) => api.get(`/publishedpairs/${email}`)
 export const addPublishedRating = (id, userid, rating) => api.put(`/published_addrating/${id}/${userid}`, {
     rating: rating
 })
@@ -67,7 +67,10 @@ export const addPublishedComment = (id, text, author) => api.put(`/published_add
 
 export const addListen = (id) => api.put(`/published_addlisten/${id}`)
 
+export const getPublisheds = () => api.get(`/publisheds/`)
+
 const apis = {
+    getPublisheds,
     addListen,
     publishPlaylist,
     createPlaylist,

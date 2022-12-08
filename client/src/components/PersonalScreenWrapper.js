@@ -9,11 +9,17 @@ import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
 import GlobalStoreContext from '../store'
 import PublishedScreen from './PublishedScreen'
+import { PersonalScreen } from '.'
 
 export default function PublishedScreenWrapper(props) {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [searchText, setSearchText] = useState("");
+    const [refresh, setRefresh] = useState(true);
+
+    function performRefresh() {
+        setRefresh(!refresh);
+    }
 
     let songWindow = "";
     if (store.currentList != null) {
@@ -29,20 +35,13 @@ export default function PublishedScreenWrapper(props) {
 
             <Box sx={{ display: 'flex' }}>
                 <Box sx={{ overflow: 'scroll', height: '83vh', width: '100%' }}>
-                    <PublishedScreen searchText={searchText} />
+                    <PersonalScreen searchText={searchText} refresh={performRefresh} />
                 </Box>
                 {songWindow}
             </Box>
         </Box>
     else
         return <Box>
-            <ToolBar setSearchText={setSearchText} />
-
-            <Box sx={{ display: 'flex' }}>
-                <Box sx={{ overflow: 'scroll', height: '83vh', width: '100%' }}>
-                    <PublishedScreen searchText={searchText} />
-                </Box>
-                {songWindow}
-            </Box>
+            <SplashScreen />
         </Box>
 }

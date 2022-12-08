@@ -36,6 +36,7 @@ export const GlobalStoreActionType = {
     PUBLISH_NEW_LIST: "PUBLISH_NEW_LIST",
     ADD_RATING: "ADD_RATING",
     MARK_LIST_FOR_PUBLICATION: "MARK_LIST_FOR_PUBLICATION",
+    GET_PLAYLISTS: "GET_PLAYLISTS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -67,6 +68,7 @@ function GlobalStoreContextProvider(props) {
         listIdMarkedForPublication: null,
         listMarkedForDeletion: null,
         listMarkedForPublication: null,
+        publishedPlaylists: []
     });
     const history = useHistory();
 
@@ -96,6 +98,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -113,6 +116,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 })
             }
             // CREATE A NEW LIST
@@ -130,6 +134,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 })
             }
             case GlobalStoreActionType.PUBLISH_NEW_LIST: {
@@ -146,6 +151,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 })
             }
             case GlobalStoreActionType.ADD_RATING: {
@@ -162,6 +168,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -179,6 +186,24 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists,
+                });
+            }
+            case GlobalStoreActionType.GET_PLAYLISTS: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    publishedIdNamePairs: store.publishedIdNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listIdMarkedForPublication: null,
+                    listMarkedForDeletion: null,
+                    listMarkedForPublication: null,
+                    publishedPlaylists: payload,
                 });
             }
             case GlobalStoreActionType.LOAD_PUBLISHED_ID_NAME_PAIRS: {
@@ -195,6 +220,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -212,6 +238,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: payload.playlist,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             case GlobalStoreActionType.MARK_LIST_FOR_PUBLICATION: {
@@ -228,6 +255,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: payload.id,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: payload.playlist,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             // UPDATE A LIST
@@ -245,6 +273,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             // START EDITING A LIST NAME
@@ -262,6 +291,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             // 
@@ -279,6 +309,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             case GlobalStoreActionType.PUBLISH_LIST: {
@@ -294,7 +325,8 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
-                    listMarkedForPublication: null
+                    listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
 
                 });
             }
@@ -312,6 +344,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             case GlobalStoreActionType.SET_SONG: {
@@ -328,6 +361,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -344,6 +378,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForPublication: null,
                     listMarkedForDeletion: null,
                     listMarkedForPublication: null,
+                    publishedPlaylists: store.publishedPlaylists
                 });
             }
             default:
@@ -484,7 +519,6 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
-        history.push("/published/");
     }
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
@@ -575,9 +609,9 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
-    store.loadPublishedIdNamePairs = function () {
-        async function asyncLoadPublishedIdNamePairs() {
-            const response = await api.getPublishedPairs();
+    store.loadPublishedIdNamePairs = function (email) {
+        async function asyncLoadPublishedIdNamePairs(joe) {
+            const response = await api.getPublishedPairs(joe);
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
                 console.log(pairsArray);
@@ -590,7 +624,26 @@ function GlobalStoreContextProvider(props) {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         }
-        asyncLoadPublishedIdNamePairs();
+        asyncLoadPublishedIdNamePairs(email);
+    }
+
+    store.loadAllPublisheds = function () {
+        async function asyncLoadPublisheds() {
+            const response = await api.getPublisheds();
+            if (response.data.success) {
+                let playlists = response.data.data;
+                console.log(playlists);
+                storeReducer({
+                    type: GlobalStoreActionType.GET_PLAYLISTS,
+                    payload: playlists
+                });
+                console.log("IMSOCONFUSED" + JSON.stringify(store.publishedPlaylists))
+            }
+            else {
+                console.log("API FAILED TO GET TPALYLISTS");
+            }
+        }
+        asyncLoadPublisheds();
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
@@ -723,6 +776,20 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncSetCurrentList(id);
+    }
+
+    store.getPublishedListAuthor = function (id) {
+        async function asyncSetCurrentList(id) {
+            let response = await api.getPublishedById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+
+                if (playlist != null) {
+                    return playlist.email;
+                }
+            }
+        }
+        return asyncSetCurrentList(id);
     }
 
     store.getPlaylistSize = function () {
@@ -860,18 +927,20 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
-    function KeyPress(event) {
-        if (!store.modalOpen && event.ctrlKey) {
-            if (event.key === 'z') {
-                store.undo();
-            }
-            if (event.key === 'y') {
+    let handleKeyDown = (event) => {
+        if (event.ctrlKey) {
+            if ((event.key === 'y') || (event.key === 'Y')) {
+                console.log('REDO');
                 store.redo();
+            }
+            else if ((event.key === 'z') || (event.key === 'Z')) {
+                console.log('UNDO');
+                store.undo();
             }
         }
     }
-
-    document.onkeydown = (event) => KeyPress(event);
+    // Control Z (+SHIFT)
+    window.addEventListener('keydown', handleKeyDown)
 
     return (
         <GlobalStoreContext.Provider value={{

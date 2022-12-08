@@ -81,7 +81,7 @@ export default function SongWindow() {
             <TabPanel value="1">
                 <Box sx={{ display: 'grid' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <YoutubePlayer videoId={store.currentSong} setPlayer={setYoutubePlayer} />
+                        <YoutubePlayer videos={store.currentList.songs} index={store.currentSongIndex} setPlayer={setYoutubePlayer} />
                     </Box>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'grid' }}>
                         <Typography variant="h5" component="h5">

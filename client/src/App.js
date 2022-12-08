@@ -31,6 +31,7 @@ import {
     WorkspaceScreen
 } from './components'
 import PublishedScreenWrapper from './components/PublishedScreenWrapper';
+import PersonalScreenWrapper from './components/PersonalScreenWrapper';
 /*
     This is our application's top-level component.
     
@@ -40,6 +41,7 @@ import PublishedScreenWrapper from './components/PublishedScreenWrapper';
   This is the entry-point for our application. Notice that we
   inject our store into all the components in our application.
   
+                        <Route path="/playlist/:id" exact component={WorkspaceScreen} />
   @author McKilla Gorilla
 */
 const App = () => {
@@ -53,9 +55,9 @@ const App = () => {
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />
                         <Route path="/published/" exact component={PublishedScreenWrapper} />
-                        <Route path="/login/" exact component={LoginScreen} />
+                        <Route path="/personal/" exact component={PersonalScreenWrapper} />
                         <Route path="/register/" exact component={RegisterScreen} />
-                        <Route path="/playlist/:id" exact component={WorkspaceScreen} />
+                        <Route path="/login/" exact component={LoginScreen} />
                     </Switch>
                     <Statusbar />
                 </GlobalStoreContextProvider>

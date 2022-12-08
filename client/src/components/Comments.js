@@ -25,6 +25,12 @@ const Comments = (props) => {
                 <List sx={{ width: '100%', bgcolor: 'background.paper', mb: "20px" }}>
                     {
                         store.currentList.comments.map((comment) => {
+                            function returnPublishDate() {
+                                if (comment.date != null) {
+                                    let dStr = new Date(comment.date).toDateString();
+                                    return dStr;
+                                }
+                            }
                             return (<ListItem>
                                 <Grid>
                                     <Box sx={{ width: '100%', bgcolor: 'primary.light' }}><Typography
@@ -37,7 +43,7 @@ const Comments = (props) => {
                                         {"By: " + comment.author}
                                     </Typography>
                                     <Typography>
-                                        {comment.Date}
+                                        {"Posted: " + returnPublishDate()}
                                     </Typography>
                                 </Grid>
                             </ListItem>
@@ -64,11 +70,13 @@ const Comments = (props) => {
                     label="Post Comment"
                     variant="filled"
                     sx={{ width: '100%' }}
+                    value={commentText}
                     onChange={(event) => setCommentText(event.target.value)}>
                 </TextField>
                 <Button
                     onClick={(event) => {
                         store.addComment(commentText)
+                        setCommentText("");
                         refresher();
                     }}
                     variant="outlined"><PostAddIcon /></Button>

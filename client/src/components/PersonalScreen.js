@@ -15,13 +15,13 @@ import AuthContext from '../auth';
     @author McKilla Gorilla
 */
 const PublishedScreen = (props) => {
-    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [expanded, setExpanded] = useState(false);
-    const { searchText } = props;
+    const { searchText, performRefresh } = props;
 
     useEffect(() => {
-        store.loadPublishedIdNamePairs(null);
+        store.loadPublishedIdNamePairs(auth.user.email);
     }, []);
 
     function handleCreateNewList() {
@@ -29,12 +29,12 @@ const PublishedScreen = (props) => {
     }
     let listCard = "";
     if (store) {
+
         listCard =
             <List sx={{ width: '100%', bgcolor: 'background.paper', mb: "20px" }}>
                 {
                     store.idNamePairs.map((pair) => {
                         if (pair.name.toLowerCase().includes(searchText.toLowerCase())) {
-                            console.log();
                             return (<PublishedCard
                                 key={pair._id}
                                 idNamePair={pair}

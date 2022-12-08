@@ -26,6 +26,7 @@ export default function ToolBar(props) {
     const isMenuOpen = Boolean(anchorEl);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
+        console.log(JSON.stringify(store));
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -70,7 +71,8 @@ export default function ToolBar(props) {
                                 aria-label="Play"
                                 sx={{ mr: 0 }}
                             >
-                                <Person2Icon />
+                                <Link onClick={handleHouseClick} style={{ textDecoration: 'none', color: 'white' }} to='/personal/'><Person2Icon /></Link>
+
                             </IconButton>
                         </Box>
 
