@@ -384,8 +384,20 @@ getPublishedPairs = async (req, res) => {
             errorMessage: 'UNAUTHORIZED'
         })
     }
-    async function asyncFindList() {
-        await Published.find({}, (err, playlists) => {
+    let email = null;
+    console.log("REQ!!!: " + JSON.stringify(req.params.email))
+    if (req.params.email != "null") {
+        email = req.params.email
+
+    }
+    console.log("EMAIL:" + JSON.stringify(email))
+
+    async function asyncFindList(email) {
+        let query = {}
+        if (email != null) {
+            query = { ownerEmail: email }
+        }
+        await Published.find(query, (err, playlists) => {
             console.log("found Playlists: " + JSON.stringify(playlists));
             if (err) {
                 return res.status(400).json({ success: false, error: err })
@@ -412,7 +424,7 @@ getPublishedPairs = async (req, res) => {
             }
         }).catch(err => console.log(err))
     }
-    asyncFindList();
+    asyncFindList(email);
 }
 getPublisheds = async (req, res) => {
     if (auth.verifyUser(req) === null) {
@@ -429,6 +441,7 @@ getPublisheds = async (req, res) => {
                 .status(404)
                 .json({ success: false, error: `Playlists not found` })
         }
+        console.log("FOUNDPUBLSHEDS: " + JSON.stringify(playlists))
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
 }

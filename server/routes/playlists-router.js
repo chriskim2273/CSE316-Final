@@ -24,7 +24,7 @@ router.put('/published_addrating/:id/:userid', auth.verify, PublishedController.
 router.put('/published_addlisten/:id', auth.verify, PublishedController.addListen)
 router.put('/published_addcomment/:id', auth.verify, PublishedController.addComment)
 router.get('/published/:id', auth.verify, PublishedController.getPublishedById)
-router.get('/publishedpairs', auth.verify, PublishedController.getPublishedPairs)
+router.get('/publishedpairs/:email', auth.verify, PublishedController.getPublishedPairs)
 router.get('/publisheds', auth.verify, PublishedController.getPublisheds)
 
 module.exports = router
